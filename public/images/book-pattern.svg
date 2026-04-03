@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Define patterns -->
+  <defs>
+    <!-- Book pattern -->
+    <g id="book">
+      <rect x="0" y="0" width="15" height="20" fill="none" stroke="#000000" stroke-width="0.5" rx="1"/>
+      <line x1="3" y1="0" x2="3" y2="20" stroke="#000000" stroke-width="0.3"/>
+      <line x1="12" y1="0" x2="12" y2="20" stroke="#000000" stroke-width="0.3"/>
+    </g>
+    
+    <!-- Open book pattern -->
+    <g id="open-book">
+      <path d="M0,10 Q7.5,5 15,10 Q7.5,15 0,10" fill="none" stroke="#000000" stroke-width="0.5"/>
+      <path d="M15,10 Q22.5,5 30,10 Q22.5,15 15,10" fill="none" stroke="#000000" stroke-width="0.5"/>
+      <line x1="15" y1="10" x2="15" y2="10" stroke="#000000" stroke-width="0.3"/>
+    </g>
+    
+    <!-- Heart -->
+    <g id="heart">
+      <path d="M0,3 C0,1 1,0 3,0 C5,0 6,1 6,3 C6,1 7,0 9,0 C11,0 12,1 12,3 C12,5 11,6 9,8 L6,12 L3,8 C1,6 0,5 0,3 Z" 
+            fill="none" stroke="#000000" stroke-width="0.5"/>
+    </g>
+    
+    <!-- Star -->
+    <g id="star">
+      <path d="M6,0 L7.5,4 L12,4 L8,7 L9.5,11 L6,8 L2.5,11 L4,7 L0,4 L4.5,4 Z" 
+            fill="none" stroke="#000000" stroke-width="0.5"/>
+    </g>
+    
+    <!-- Leaf -->
+    <g id="leaf">
+      <path d="M0,5 Q2,2 4,3 Q6,4 8,2 Q10,3 12,5 Q10,7 8,8 Q6,9 4,8 Q2,7 0,5 Z" 
+            fill="none" stroke="#000000" stroke-width="0.5"/>
+      <line x1="6" y1="5" x2="6" y2="8" stroke="#000000" stroke-width="0.3"/>
+    </g>
+    
+    <!-- Flower -->
+    <g id="flower">
+      <circle cx="3" cy="3" r="1.5" fill="none" stroke="#000000" stroke-width="0.5"/>
+      <circle cx="7" cy="1" r="1.5" fill="none" stroke="#000000" stroke-width="0.5"/>
+      <circle cx="1" cy="1" r="1.5" fill="none" stroke="#000000" stroke-width="0.5"/>
+      <circle cx="5" cy="0" r="1.5" fill="none" stroke="#000000" stroke-width="0.5"/>
+      <circle cx="3" cy="6" r="1" fill="#000000"/>
+    </g>
+  </defs>
+  
+  <!-- Pattern background -->
+  <rect width="200" height="200" fill="#5c6b73" opacity="0.05"/>
+  
+  <!-- Scattered elements -->
+  <use href="#book" x="10" y="15" transform="rotate(15 17.5 20)"/>
+  <use href="#open-book" x="40" y="25" transform="rotate(-10 22.5 15)"/>
+  <use href="#heart" x="25" y="40" opacity="0.6"/>
+  <use href="#star" x="60" y="35" opacity="0.7"/>
+  <use href="#leaf" x="80" y="20" transform="rotate(25 6 5)"/>
+  <use href="#flower" x="120" y="30" opacity="0.8"/>
+  <use href="#book" x="150" y="45" transform="rotate(-20 17.5 20)"/>
+  <use href="#open-book" x="100" y="60" transform="rotate(5 22.5 15)"/>
+  <use href="#heart" x="140" y="70" opacity="0.5"/>
+  <use href="#star" x="30" y="80" opacity="0.6"/>
+  <use href="#leaf" x="170" y="85" transform="rotate(-15 6 5)"/>
+  <use href="#flower" x="50" y="100" opacity="0.7"/>
+  <use href="#book" x="90" y="110" transform="rotate(30 17.5 20)"/>
+  <use href="#open-book" x="160" y="120" transform="rotate(-5 22.5 15)"/>
+  <use href="#heart" x="70" y="130" opacity="0.8"/>
+  <use href="#star" x="180" y="140" opacity="0.5"/>
+  <use href="#leaf" x="20" y="150" transform="rotate(40 6 5)"/>
+  <use href="#flower" x="130" y="160" opacity="0.6"/>
+  <use href="#book" x="110" y="170" transform="rotate(-25 17.5 20)"/>
+  <use href="#open-book" x="5" y="180" transform="rotate(15 22.5 15)"/>
+  <use href="#heart" x="165" y="185" opacity="0.7"/>
+  <use href="#star" x="85" y="190" opacity="0.8"/>
+</svg>

@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Caveat:wght@400;700&display=swap');
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Caveat', cursive;
+    background: linear-gradient(135deg, #f8f8fc 0%, #e3e1f0 50%, #d9dde6 100%);
+    color: #2d3047;
+    min-height: 100vh;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer components {
+  .feminine-button {
+    background: linear-gradient(135deg, #2d3047 0%, #6777a4 100%);
+    color: #f8f8fc;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(45, 48, 71, 0.3);
+  }
+  
+  .feminine-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(45, 48, 71, 0.4);
+  }
+  
+  .soft-rounded {
+    @apply rounded-2xl;
+  }
+  
+  .paper-page {
+    background: linear-gradient(135deg, #f8f8fc 0%, #f1f0f8 100%);
+    border: 1px solid #d5d2e8;
+    box-shadow: 0 4px 20px rgba(45, 48, 71, 0.1);
+    position: relative;
+  }
+  
+  .paper-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c1bddb, transparent);
+  }
+  
+  .wooden-shelf {
+    background: linear-gradient(180deg, #1b3427 0%, #224937 50%, #2a5e47 100%);
+    border: 2px solid #141f17;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(51, 115, 87, 0.3);
+  }
+  
+  .wooden-shelf::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #337357, #52ffb8, #337357);
+  }
+  
+  .book-spine {
+    background: linear-gradient(135deg, #2d3047 0%, #c1bddb 100%);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: 16px 8px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(45, 48, 71, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .book-spine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #52ffb8, #e84855);
+  }
+  
+  .book-spine:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(45, 48, 71, 0.3);
+  }
+  
+  .star-rating {
+    display: flex;
+    gap: 4px;
+  }
+  
+  .star {
+    width: 20px;
+    height: 20px;
+    color: #fbbf24;
+    transition: all 0.2s ease;
+  }
+  
+  .star:hover {
+    transform: scale(1.1);
+  }
+  
+  .star.empty {
+    color: #d6d3d1;
+  }
+}

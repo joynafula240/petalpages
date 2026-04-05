@@ -4,6 +4,24 @@ import LibraryCard from './LibraryCard';
 import { Plus, BookOpen } from 'lucide-react';
 
 const BookShelf = ({ books, onBookClick, onAddBook }) => {
+  const handleAddBookClick = () => {
+    // Open book journal with empty book data
+    onAddBook({
+      title: '',
+      author: '',
+      status: 'Want to Read',
+      rating: 0,
+      genre: '',
+      trope: '',
+      format: 'paperback',
+      notes: '',
+      quotes: '',
+      startDate: '',
+      finishDate: '',
+      cover: ''
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-periwinkle-50 via-periwinkle-100 to-space-indigo-100 p-8">
       {/* Add Book Button */}
@@ -14,7 +32,7 @@ const BookShelf = ({ books, onBookClick, onAddBook }) => {
         className="flex justify-center mb-8"
       >
         <button
-          onClick={onAddBook}
+          onClick={handleAddBookClick}
           className="feminine-button flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />

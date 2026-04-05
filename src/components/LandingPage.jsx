@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Sparkles, Heart, PenTool, ArrowRight, Shuffle } from 'lucide-react';
+import { BookOpen, ArrowRight, Sparkles, Feather, Moon } from 'lucide-react';
 
 const LandingPage = ({ onStart }) => {
-  const [isShuffling, setIsShuffling] = useState(false);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
 
-  const descriptiveWords = [
-    'magical', 'enchanting', 'whimsical', 'dreamy', 'ethereal',
-    'captivating', 'mesmerizing', 'breathtaking', 'sublime', 'radiant'
+  const libraryQuotes = [
+    { text: "A library is a hospital for the mind.", author: "Anonymous" },
+    { text: "Libraries store the wisdom of every human age.", author: "Norman Cousins" },
+    { text: "A library is not a luxury but one of the necessities of life.", author: "Henry Ward Beecher" },
+    { text: "In a library, you could live a thousand lives.", author: "Anonymous" },
+    { text: "The only thing you absolutely have to know is the location of the library.", author: "Albert Einstein" }
   ];
 
-  const handleShuffle = () => {
-    setIsShuffling(true);
-    setTimeout(() => {
-      setCurrentWordIndex((prev) => (prev + 1) % descriptiveWords.length);
-      setIsShuffling(false);
-    }, 600);
-  };
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const interval = setInterval(() => {
+      setCurrentQuoteIndex((prev) => (prev + 1) % libraryQuotes.length);
+    }, 4000);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -33,213 +44,221 @@ const LandingPage = ({ onStart }) => {
         <div className="absolute inset-0 bg-gradient-to-br from-periwinkle-100 via-space-indigo-50 to-turf-green-50"></div>
       </div>
       
-      {/* Floating decorative elements */}
-      <div className="absolute inset-0 z-10">
-        {/* Floating icons */}
-        <motion.div
-          animate={{ y: [-20, 20, -20] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 left-10 text-tropical-mint/30"
-        >
-          <BookOpen className="w-12 h-12" />
-        </motion.div>
-        
-        <motion.div
-          animate={{ y: [20, -20, 20] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-40 right-20 text-watermelon/30"
-        >
-          <Heart className="w-8 h-8" />
-        </motion.div>
-        
-        <motion.div
-          animate={{ y: [-15, 15, -15] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-32 left-20 text-periwinkle/30"
-        >
-          <PenTool className="w-10 h-10" />
-        </motion.div>
+      {/* Enhanced Lace Overlay */}
+      <div className="lace-overlay"></div>
 
-        {/* Decorative squiggles */}
-        <svg className="absolute top-32 left-1/4 w-32 h-16 text-turf-green/20" viewBox="0 0 100 50">
-          <path
-            d="M10,25 Q25,5 50,25 T90,25"
-            stroke="currentColor"
-            strokeWidth="2"
-            fill="none"
-          />
-        </svg>
-        
-        <svg className="absolute bottom-20 right-1/3 w-24 h-12 text-watermelon/20" viewBox="0 0 100 50">
-          <path
-            d="M10,25 Q25,45 50,25 T90,25"
-            stroke="currentColor"
-            strokeWidth="2"
-            fill="none"
-          />
-        </svg>
-
-        {/* Blur circles */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-tropical-mint rounded-full filter blur-3xl opacity-20"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-watermelon rounded-full filter blur-3xl opacity-20"></div>
-        <div className="absolute top-1/2 right-1/3 w-56 h-56 bg-periwinkle rounded-full filter blur-3xl opacity-20"></div>
+      {/* Interactive Mouse-Following Sparkles */}
+      <div 
+        className="fixed pointer-events-none z-30"
+        style={{
+          left: mousePosition.x - 20,
+          top: mousePosition.y - 20,
+          transition: 'all 0.3s ease-out'
+        }}
+      >
+        <motion.div
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <Sparkles className="w-10 h-10 text-[#c1bddb]/30" />
+        </motion.div>
       </div>
 
-      {/* Main content */}
-      <div className="relative z-20 min-h-screen flex flex-col items-center justify-center px-4">
+      {/* Animated Floating Books */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        {/* Book 1 - Floating upward */}
         <motion.div
-          initial={{ opacity: 0, y: -30 }}
+          animate={{ 
+            y: [-20, -100, -20],
+            rotate: [0, 10, -10, 0],
+            opacity: [0.3, 0.7, 0.3]
+          }}
+          transition={{ 
+            duration: 8, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+          className="absolute top-20 left-10"
+        >
+          <BookOpen className="w-12 h-12 text-[#2d3047]/40" />
+        </motion.div>
+
+        {/* Book 2 - Gentle drift */}
+        <motion.div
+          animate={{ 
+            x: [0, 30, 0],
+            y: [20, -20, 20],
+            rotate: [0, -15, 15, 0]
+          }}
+          transition={{ 
+            duration: 6, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+          className="absolute top-40 right-20"
+        >
+          <BookOpen className="w-10 h-10 text-[#c1bddb]/40" />
+        </motion.div>
+
+        {/* Book 3 - Circular motion */}
+        <motion.div
+          animate={{ 
+            rotate: 360,
+            x: [0, 50, 0, -50, 0],
+            y: [0, -30, 0, 30, 0]
+          }}
+          transition={{ 
+            duration: 12, 
+            repeat: Infinity, 
+            ease: "linear" 
+          }}
+          className="absolute bottom-32 left-1/4"
+        >
+          <BookOpen className="w-8 h-8 text-[#2d3047]/30" />
+        </motion.div>
+
+        {/* Book 4 - Slow fall */}
+        <motion.div
+          animate={{ 
+            y: [-50, 50, -50],
+            opacity: [0.2, 0.6, 0.2]
+          }}
+          transition={{ 
+            duration: 10, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+          className="absolute top-1/3 right-1/3"
+        >
+          <BookOpen className="w-14 h-14 text-[#c1bddb]/20" />
+        </motion.div>
+      </div>
+
+      {/* Gothic Elements */}
+      <div className="absolute inset-0 z-5 pointer-events-none">
+        {/* Floating Quill Pen */}
+        <motion.div
+          animate={{ 
+            y: [-30, 30, -30],
+            rotate: [-15, 15, -15]
+          }}
+          transition={{ 
+            duration: 7, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+          className="absolute top-1/4 left-1/6"
+        >
+          <Feather className="w-8 h-8 text-[#2d3047]/30" />
+        </motion.div>
+
+        {/* Moon Phase */}
+        <motion.div
+          animate={{ 
+            opacity: [0.3, 0.7, 0.3],
+            scale: [1, 1.1, 1]
+          }}
+          transition={{ 
+            duration: 5, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+          className="absolute top-20 right-1/4"
+        >
+          <Moon className="w-10 h-10 text-[#c1bddb]/40" />
+        </motion.div>
+
+        {/* Candlelight flicker effect */}
+        <div className="absolute bottom-20 left-1/5">
+          <motion.div
+            animate={{ 
+              opacity: [0.4, 0.8, 0.4],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{ 
+              duration: 2, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="w-2 h-4 bg-yellow-300/30 rounded-full"
+          />
+        </div>
+
+        <div className="absolute bottom-32 right-1/6">
+          <motion.div
+            animate={{ 
+              opacity: [0.3, 0.7, 0.3],
+              scale: [1, 1.3, 1]
+            }}
+            transition={{ 
+              duration: 2.5, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 0.5
+            }}
+            className="w-2 h-4 bg-yellow-300/25 rounded-full"
+          />
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-20 flex items-center justify-center min-h-screen">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center mb-8"
+          transition={{ duration: 0.8 }}
+          className="text-center"
         >
-          {/* Sparkles around title */}
-          <div className="relative inline-block">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-8 -left-8 text-space-indigo/40"
-            >
-              <Sparkles className="w-6 h-6" />
-            </motion.div>
-            
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-6 -right-8 text-tropical-mint/40"
-            >
-              <Sparkles className="w-5 h-5" />
-            </motion.div>
-            
-            <motion.h1
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              className="text-6xl md:text-7xl font-serif font-bold text-space-indigo mb-4"
-            >
-              Petal Pages
-            </motion.h1>
-            
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-watermelon/40"
-            >
-              <Sparkles className="w-4 h-4" />
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Tagline with shuffle */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="text-center mb-12"
-        >
-          <p className="text-xl md:text-2xl text-space-indigo/70 font-handwritten mb-4">
-            Your {descriptiveWords[currentWordIndex]} digital reading journal
-          </p>
-          
-          <motion.button
-            whileHover={{ scale: 1.05 }}
+          {/* Interactive Logo */}
+          <motion.div
+            whileHover={{ scale: 1.05, rotate: 5 }}
             whileTap={{ scale: 0.95 }}
-            onClick={handleShuffle}
-            className="text-space-indigo/50 hover:text-space-indigo/70 transition-colors"
-            title="Shuffle description"
+            className="inline-flex items-center justify-center w-24 h-24 bg-[#2d3047] rounded-full mb-8 shadow-lg cursor-pointer"
           >
-            <Shuffle className={`w-5 h-5 ${isShuffling ? 'animate-spin' : ''}`} />
-          </motion.button>
-        </motion.div>
+            <BookOpen className="w-12 h-12 text-white" />
+          </motion.div>
 
-        {/* Decorative line */}
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: '200px' }}
-          transition={{ duration: 1, delay: 0.6 }}
-          className="h-0.5 bg-gradient-to-r from-transparent via-turf-green to-transparent mb-12"
-        />
+          {/* Title */}
+          <h1 className="text-5xl md:text-6xl font-serif font-bold text-[#2d3047] mb-4">
+            Petal Pages
+          </h1>
+          
+          <p className="text-xl text-[#2d3047]/70 mb-8 max-w-2xl mx-auto">
+            Your Personal Reading Journal
+          </p>
 
-        {/* Start button */}
-        <motion.button
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          whileHover={{ scale: 1.05, y: -3 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={onStart}
-          className="group relative px-10 py-5 bg-gradient-to-r from-space-indigo via-turf-green to-tropical-mint text-[#2d3047] font-handwritten text-xl font-bold rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 border-4 border-[#2d3047] backdrop-blur-sm"
-        >
-          <span className="relative z-10 flex items-center gap-3">
-            Begin Your Journey
+          {/* Library Quote */}
+          <motion.div
+            key={currentQuoteIndex}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.5 }}
+            className="mb-12 max-w-2xl mx-auto"
+          >
+            <p className="text-lg text-[#2d3047]/60 italic font-serif mb-2">
+              "{libraryQuotes[currentQuoteIndex].text}"
+            </p>
+            <p className="text-sm text-[#2d3047]/50">
+              — {libraryQuotes[currentQuoteIndex].author}
+            </p>
+          </motion.div>
+
+          {/* Start Your Journey Button */}
+          <motion.button
+            onClick={onStart}
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(45, 48, 71, 0.3)" }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-3 px-8 py-4 bg-[#2d3047] text-white text-lg font-medium rounded-full hover:bg-[#2d3047]/90 transition-all duration-200 shadow-lg hover:shadow-xl"
+          >
+            Start Your Journey
             <motion.div
-              animate={{ x: [0, 6, 0] }}
+              animate={{ x: [0, 5, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="text-[#2d3047] bg-tropical-mint rounded-full p-2"
             >
               <ArrowRight className="w-5 h-5" />
             </motion.div>
-          </span>
-          
-          {/* Enhanced glow effect */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-space-indigo via-turf-green to-tropical-mint opacity-50 blur-lg group-hover:opacity-75 transition-opacity duration-300"></div>
-          
-          {/* Multiple sparkles */}
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-3 -right-3 text-tropical-mint"
-          >
-            <Sparkles className="w-6 h-6" />
-          </motion.div>
-          
-          <motion.div
-            animate={{ rotate: -360 }}
-            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            className="absolute -bottom-3 -left-3 text-watermelon"
-          >
-            <Sparkles className="w-5 h-5" />
-          </motion.div>
-          
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-            className="absolute top-1/2 -left-8 text-periwinkle"
-          >
-            <Sparkles className="w-4 h-4" />
-          </motion.div>
-        </motion.button>
-
-        {/* Bottom decorative elements */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-8"
-        >
-          <motion.div
-            animate={{ y: [-5, 5, -5] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="text-space-indigo/30"
-          >
-            <BookOpen className="w-6 h-6" />
-          </motion.div>
-          
-          <motion.div
-            animate={{ y: [5, -5, 5] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="text-watermelon/30"
-          >
-            <Heart className="w-5 h-5" />
-          </motion.div>
-          
-          <motion.div
-            animate={{ y: [-3, 3, -3] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-            className="text-tropical-mint/30"
-          >
-            <PenTool className="w-5 h-5" />
-          </motion.div>
+          </motion.button>
         </motion.div>
       </div>
     </div>

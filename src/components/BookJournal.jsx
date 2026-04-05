@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Calendar, Quote, ArrowLeft, Edit, Trash2, Save, Image as ImageIcon, Headphones, BookOpen, Monitor } from 'lucide-react';
+import { Star, Calendar, Quote, ArrowLeft, Edit, Trash2, Save, Image as ImageIcon, Headphones, BookOpen, Monitor, FileText, Layers, Smartphone, Plus } from 'lucide-react';
 
 const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -8,30 +8,25 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleSave = () => {
-    onUpdate(editedBook);
+    // Handle multiple genres and tropes
+    const updatedBook = {
+      ...editedBook,
+      genres: Array.isArray(editedBook.genres) ? editedBook.genres : (editedBook.genre ? [editedBook.genre] : []),
+      tropes: Array.isArray(editedBook.tropes) ? editedBook.tropes : (editedBook.trope ? [editedBook.trope] : [])
+    };
+    setEditedBook(updatedBook);
+    onUpdate(updatedBook);
     setIsEditing(false);
+  };
+
+  const handleBookDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
   };
 
   const handleCancel = () => {
     setEditedBook(book);
     setIsEditing(false);
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      processImageFile(file);
-    }
-  };
-
-  const processImageFile = (file) => {
-    if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEditedBook({ ...editedBook, cover: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const handleDragOver = (e) => {
@@ -57,29 +52,94 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
     }
   };
 
+  const handleGenreToggle = (genre) => {
+    const currentGenres = Array.isArray(editedBook.genres) ? editedBook.genres : (editedBook.genre ? [editedBook.genre] : []);
+    if (currentGenres.includes(genre)) {
+      setEditedBook({ 
+        ...editedBook, 
+        genres: currentGenres.filter(g => g !== genre),
+        genre: currentGenres.filter(g => g !== genre)[0] || ''
+      });
+    } else {
+      const newGenres = [...currentGenres, genre];
+      setEditedBook({ 
+        ...editedBook, 
+        genres: newGenres,
+        genre: newGenres[0] || ''
+      });
+    }
+  };
+
+  const handleTropeToggle = (trope) => {
+    const currentTropes = Array.isArray(editedBook.tropes) ? editedBook.tropes : (editedBook.trope ? [editedBook.trope] : []);
+    if (currentTropes.includes(trope)) {
+      setEditedBook({ 
+        ...editedBook, 
+        tropes: currentTropes.filter(t => t !== trope),
+        trope: currentTropes.filter(t => t !== trope)[0] || ''
+      });
+    } else {
+      const newTropes = [...currentTropes, trope];
+      setEditedBook({ 
+        ...editedBook, 
+        tropes: newTropes,
+        trope: newTropes[0] || ''
+      });
+    }
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      processImageFile(file);
+    }
+  };
+
+  const processImageFile = (file) => {
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditedBook({ ...editedBook, cover: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const genreOptions = [
-    'Fantasy', 'Romance', 'Mystery', 'Sci-Fi', 'Thriller', 
+    'Fantasy', 'Romance', 'Mystery', 'Sci-Fi', 'Thriller',
     'Horror', 'Contemporary', 'Historical Fiction', 'Non-Fiction',
     'Biography', 'Self-Help', 'Poetry', 'Dystopian', 'Adventure',
-    'Young Adult', 'Middle Grade', 'Classic Literature'
+    'Young Adult', 'Classic Literature', 'Gothic Fiction', 'Urban Fantasy',
+    'Literary Fiction', 'Memoir', 'True Crime', 'Psychological Thriller',
+    'Magical Realism', 'Dark Academia', 'High Fantasy', 'Cozy Mystery',
+    'Paranormal Romance', 'Dark Romance', 'Historical Romance', 'LGBTQ+',
+    'Women\'s Fiction', 'Fairy Tale Retelling', 'Mythology', 'Cyberpunk',
+    'Steampunk', 'Space Opera'
   ];
 
   const tropeOptions = [
     'Enemies to Lovers', 'Friends to Lovers', 'Fake Dating', 'Forced Proximity',
     'Slow Burn', 'Insta-Love', 'Love Triangle', 'Second Chance Romance',
     'Grumpy x Sunshine', 'Forbidden Love', 'Age Gap', 'Arranged Marriage',
-    'Marriage of Convenience', 'Secret Identity', 'Amnesia', 'Time Travel',
-    'Reunion', 'Small Town', 'Found Family', 'Opposites Attract',
-    'One Bed', 'Only One Bed', 'Touch Her and Die', 'Protective Hero',
-    'Villain Romance', 'Dark Romance', 'Spice', 'Closed Door',
-    'Open Door', 'Reverse Harem', 'Why Choose', 'Standalone',
-    'Series', 'Cliffhanger', 'HEA', 'HFN'
+    'Secret Identity', 'Amnesia', 'Time Travel', 'Reunion',
+    'Small Town', 'Found Family', 'Opposites Attract', 'One Bed',
+    'Only One Bed', 'Touch Her and Die', 'Protective Hero',
+    'Fated Mates', 'Who Did This To You', 'Hurt/Comfort', 'Marriage of Convenience',
+    'Villain Gets the Girl', 'Morally Grey', 'Academic Rivals', 'Workplace Romance',
+    'Right Person Wrong Time', 'Soulmates', 'Sunshine x Sunshine', 'Grumpy x Grumpy',
+    'Childhood Friends to Lovers', 'Brother\'s Best Friend', 'Best Friend\'s Brother',
+    'Billionaire', 'Mafia', 'Sports Romance'
   ];
 
   const formatOptions = [
     { value: 'audiobook', label: 'Audiobook', icon: Headphones },
     { value: 'paperback', label: 'Paperback', icon: BookOpen },
-    { value: 'ebook', label: 'E-book', icon: Monitor }
+    { value: 'ebook', label: 'E-book', icon: Monitor },
+    { value: 'hardcover', label: 'Hardcover', icon: FileText },
+    { value: 'graphic-novel', label: 'Graphic Novel', icon: Layers },
+    { value: 'manga', label: 'Manga', icon: BookOpen },
+    { value: 'webnovel', label: 'Web Novel', icon: Smartphone },
+    { value: 'anthology', label: 'Anthology', icon: FileText }
   ];
 
   const renderStars = (rating) => {
@@ -96,13 +156,13 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Completed':
-        return 'bg-sage-green text-white';
+        return 'bg-[#2d3047] text-white shadow-lg';
       case 'Reading':
-        return 'bg-blush-pink text-white';
+        return 'bg-[#2d3047] text-white shadow-lg';
       case 'DNF':
-        return 'bg-dusty-rose text-white';
+        return 'bg-[#c1bddb] text-[#2d3047] shadow-lg';
       default:
-        return 'bg-soft-beige text-warm-brown';
+        return 'bg-cream text-warm-brown/70';
     }
   };
 
@@ -237,7 +297,7 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                 {isEditing ? (
                   <input
                     type="text"
-                    value={editedBook.title}
+                    value={editedBook.title || ''}
                     onChange={(e) => setEditedBook({ ...editedBook, title: e.target.value })}
                     className="w-full text-3xl md:text-4xl font-serif font-bold text-warm-brown bg-transparent border-b-2 border-warm-brown/30 focus:border-blush-pink outline-none px-2 py-1 mb-2"
                   />
@@ -250,7 +310,7 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                 {isEditing ? (
                   <input
                     type="text"
-                    value={editedBook.author}
+                    value={editedBook.author || ''}
                     onChange={(e) => setEditedBook({ ...editedBook, author: e.target.value })}
                     className="w-full text-lg md:text-xl text-warm-brown/70 bg-transparent border-b border-warm-brown/20 focus:border-dusty-rose outline-none px-2 py-1 mb-3 font-handwritten"
                   />
@@ -263,60 +323,130 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                 {/* Genre and Trope */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-warm-brown mb-2">Genre</label>
+                    <label className="block text-sm font-medium text-warm-brown mb-2">Genres</label>
                     {isEditing ? (
-                      <select
-                        value={editedBook.genre || ''}
-                        onChange={(e) => setEditedBook({ ...editedBook, genre: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg border border-warm-brown/20 focus:border-blush-pink outline-none bg-cream text-sm"
-                      >
-                        <option value="">Select Genre</option>
-                        {genreOptions.map(genre => (
-                          <option key={genre} value={genre}>{genre}</option>
-                        ))}
-                      </select>
+                      <div className="space-y-2">
+                        {/* Selected Genres */}
+                        <div className="flex flex-wrap gap-1 min-h-[32px] p-2 border border-warm-brown/20 rounded-lg bg-cream">
+                          {(Array.isArray(editedBook.genres) ? editedBook.genres : (editedBook.genre ? [editedBook.genre] : [])).length > 0 ? (
+                            (Array.isArray(editedBook.genres) ? editedBook.genres : (editedBook.genre ? [editedBook.genre] : [])).map(genre => (
+                              <span key={genre} className="px-2 py-1 bg-[#2d3047] text-white text-xs rounded-full font-medium flex items-center gap-1">
+                                {genre}
+                                <button
+                                  type="button"
+                                  onClick={() => handleGenreToggle(genre)}
+                                  className="ml-1 hover:text-[#c1bddb] transition-colors"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-warm-brown/50 text-sm italic">Click to add genres...</span>
+                          )}
+                        </div>
+                        
+                        {/* Genre Selector */}
+                        <div className="relative">
+                          <select
+                            value=""
+                            onChange={(e) => e.target.value && handleGenreToggle(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg border border-warm-brown/20 bg-cream text-warm-brown text-sm focus:border-[#c1bddb] outline-none"
+                          >
+                            <option value="">+ Add Genre</option>
+                            {genreOptions.filter(genre => 
+                              !(Array.isArray(editedBook.genres) ? editedBook.genres : (editedBook.genre ? [editedBook.genre] : [])).includes(genre)
+                            ).map(genre => (
+                              <option key={genre} value={genre}>{genre}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
                     ) : (
-                      <p className="text-warm-brown/70 text-sm">
-                        {book.genre || 'Not specified'}
-                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {(Array.isArray(book.genres) ? book.genres : (book.genre ? [book.genre] : [])).length > 0 ? (
+                          (Array.isArray(book.genres) ? book.genres : (book.genre ? [book.genre] : [])).map(genre => (
+                            <span key={genre} className="px-2 py-1 bg-[#2d3047] text-white text-xs rounded-full font-medium">
+                              {genre}
+                            </span>
+                          ))
+                        ) : (
+                          <p className="text-warm-brown/70 text-sm">Not specified</p>
+                        )}
+                      </div>
                     )}
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-warm-brown mb-2">Trope</label>
+                    <label className="block text-sm font-medium text-warm-brown mb-2">Tropes</label>
                     {isEditing ? (
-                      <select
-                        value={editedBook.trope || ''}
-                        onChange={(e) => setEditedBook({ ...editedBook, trope: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg border border-warm-brown/20 focus:border-blush-pink outline-none bg-cream text-sm"
-                      >
-                        <option value="">Select Trope</option>
-                        {tropeOptions.map(trope => (
-                          <option key={trope} value={trope}>{trope}</option>
-                        ))}
-                      </select>
+                      <div className="space-y-2">
+                        {/* Selected Tropes */}
+                        <div className="flex flex-wrap gap-1 min-h-[32px] p-2 border border-warm-brown/20 rounded-lg bg-cream">
+                          {(Array.isArray(editedBook.tropes) ? editedBook.tropes : (editedBook.trope ? [editedBook.trope] : [])).length > 0 ? (
+                            (Array.isArray(editedBook.tropes) ? editedBook.tropes : (editedBook.trope ? [editedBook.trope] : [])).map(trope => (
+                              <span key={trope} className="px-2 py-1 bg-[#2d3047] text-white text-xs rounded-full font-medium flex items-center gap-1">
+                                {trope}
+                                <button
+                                  type="button"
+                                  onClick={() => handleTropeToggle(trope)}
+                                  className="ml-1 hover:text-[#c1bddb] transition-colors"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-warm-brown/50 text-sm italic">Click to add tropes...</span>
+                          )}
+                        </div>
+                        
+                        {/* Trope Selector */}
+                        <div className="relative">
+                          <select
+                            value=""
+                            onChange={(e) => e.target.value && handleTropeToggle(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg border border-warm-brown/20 bg-cream text-warm-brown text-sm focus:border-[#c1bddb] outline-none"
+                          >
+                            <option value="">+ Add Trope</option>
+                            {tropeOptions.filter(trope => 
+                              !(Array.isArray(editedBook.tropes) ? editedBook.tropes : (editedBook.trope ? [editedBook.trope] : [])).includes(trope)
+                            ).map(trope => (
+                              <option key={trope} value={trope}>{trope}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
                     ) : (
-                      <p className="text-warm-brown/70 text-sm">
-                        {book.trope || 'Not specified'}
-                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {(Array.isArray(book.tropes) ? book.tropes : (book.trope ? [book.trope] : [])).length > 0 ? (
+                          (Array.isArray(book.tropes) ? book.tropes : (book.trope ? [book.trope] : [])).map(trope => (
+                            <span key={trope} className="px-2 py-1 bg-[#2d3047] text-white text-xs rounded-full font-medium">
+                              {trope}
+                            </span>
+                          ))
+                        ) : (
+                          <p className="text-warm-brown/70 text-sm">Not specified</p>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
 
                 {/* Format */}
-                <div className="mb-4">
+                <div className="mb-6 relative z-10">
                   <label className="block text-sm font-medium text-warm-brown mb-2">Format</label>
                   {isEditing ? (
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 flex-wrap">
                       {formatOptions.map(format => {
                         const Icon = format.icon;
                         return (
                           <label
                             key={format.value}
-                            className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
+                            className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all relative z-20 ${
                               editedBook.format === format.value
-                                ? 'border-blush-pink bg-blush-pink/20 text-warm-brown'
-                                : 'border-warm-brown/20 bg-cream text-warm-brown/70 hover:border-dusty-rose'
+                                ? 'border-[#2d3047] bg-[#2d3047] text-white shadow-lg'
+                                : 'border-warm-brown/20 bg-cream text-warm-brown/70 hover:border-[#c1bddb]'
                             }`}
                           >
                             <input
@@ -327,33 +457,30 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                               onChange={(e) => setEditedBook({ ...editedBook, format: e.target.value })}
                               className="hidden"
                             />
-                            <Icon className="w-4 h-4" />
-                            <span className="text-sm">{format.label}</span>
+                            <Icon className="w-4 h-4 flex-shrink-0" />
+                            <span className="text-xs font-medium whitespace-nowrap">{format.label}</span>
                           </label>
                         );
                       })}
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
-                      {book.format && (
-                        <>
-                          {(() => {
-                            const selectedFormat = formatOptions.find(f => f.value === book.format);
-                            const Icon = selectedFormat?.icon || BookOpen;
-                            return (
-                              <>
-                                <Icon className="w-4 h-4 text-warm-brown/70" />
-                                <span className="text-warm-brown/70 text-sm">
-                                  {selectedFormat?.label || 'Not specified'}
-                                </span>
-                              </>
-                            );
-                          })()}
-                        </>
-                      )}
-                      {!book.format && (
-                        <span className="text-warm-brown/70 text-sm">Not specified</span>
-                      )}
+                    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors relative z-20 ${
+                      book.format 
+                        ? 'border-[#2d3047] bg-[#2d3047]/10 text-[#2d3047]' 
+                        : 'border-warm-brown/20 bg-cream text-warm-brown/70'
+                    }`}>
+                      {(() => {
+                        const selectedFormat = formatOptions.find(f => f.value === book.format);
+                        const Icon = selectedFormat ? selectedFormat.icon : BookOpen;
+                        return (
+                          <>
+                            <Icon className="w-4 h-4 flex-shrink-0" />
+                            <span className="text-xs font-medium whitespace-nowrap">
+                              {selectedFormat ? selectedFormat.label : 'Not specified'}
+                            </span>
+                          </>
+                        );
+                      })()}
                     </div>
                   )}
                 </div>
@@ -365,17 +492,26 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                   <label className="block text-sm font-medium text-warm-brown mb-2">Status</label>
                   {isEditing ? (
                     <select
-                      value={editedBook.status}
+                      value={editedBook.status || ''}
                       onChange={(e) => setEditedBook({ ...editedBook, status: e.target.value })}
-                      className={`w-full px-3 py-2 rounded-lg border border-warm-brown/20 focus:border-blush-pink outline-none ${getStatusColor(editedBook.status)}`}
+                      className={`w-full px-3 py-2 rounded-lg border transition-colors outline-none text-sm font-medium ${
+                        editedBook.status 
+                          ? 'border-[#2d3047] bg-[#2d3047] text-white shadow-lg' 
+                          : 'border-warm-brown/20 bg-cream text-warm-brown focus:border-[#c1bddb]'
+                        }`}
                     >
-                      <option value="Reading">Reading</option>
-                      <option value="Completed">Completed</option>
-                      <option value="DNF">DNF</option>
+                      <option value="" className="bg-cream text-warm-brown">Select Status</option>
+                      <option value="Reading" className="bg-cream text-warm-brown">Reading</option>
+                      <option value="Completed" className="bg-cream text-warm-brown">Completed</option>
+                      <option value="DNF" className="bg-cream text-warm-brown">DNF</option>
                     </select>
                   ) : (
-                    <div className={`px-3 py-2 rounded-lg text-sm font-medium ${getStatusColor(book.status)}`}>
-                      {book.status}
+                    <div className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                      book.status 
+                        ? getStatusColor(book.status) 
+                        : 'bg-cream text-warm-brown/70'
+                    }`}>
+                      {book.status || 'Not specified'}
                     </div>
                   )}
                 </div>
@@ -384,8 +520,8 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                   <label className="block text-sm font-medium text-warm-brown mb-2">Rating</label>
                   {isEditing ? (
                     <select
-                      value={editedBook.rating}
-                      onChange={(e) => setEditedBook({ ...editedBook, rating: parseInt(e.target.value) })}
+                      value={editedBook.rating || ''}
+                      onChange={(e) => setEditedBook({ ...editedBook, rating: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 rounded-lg border border-warm-brown/20 focus:border-blush-pink outline-none bg-cream"
                     >
                       {[1, 2, 3, 4, 5].map(rating => (
@@ -407,7 +543,7 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                   {isEditing ? (
                     <input
                       type="date"
-                      value={editedBook.startDate}
+                      value={editedBook.startDate || ''}
                       onChange={(e) => setEditedBook({ ...editedBook, startDate: e.target.value })}
                       className="w-full px-3 py-2 rounded-lg border border-warm-brown/20 focus:border-blush-pink outline-none bg-cream"
                     />
@@ -423,7 +559,7 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                   {isEditing ? (
                     <input
                       type="date"
-                      value={editedBook.finishDate}
+                      value={editedBook.finishDate || ''}
                       onChange={(e) => setEditedBook({ ...editedBook, finishDate: e.target.value })}
                       className="w-full px-3 py-2 rounded-lg border border-warm-brown/20 focus:border-blush-pink outline-none bg-cream"
                     />
@@ -443,7 +579,7 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                 <label className="block text-sm font-medium text-warm-brown mb-2">Personal Notes</label>
                 {isEditing ? (
                   <textarea
-                    value={editedBook.notes}
+                    value={editedBook.notes || ''}
                     onChange={(e) => setEditedBook({ ...editedBook, notes: e.target.value })}
                     rows={8}
                     className="w-full px-4 py-3 rounded-lg border border-warm-brown/20 focus:border-blush-pink outline-none bg-cream font-handwritten resize-none"
@@ -451,9 +587,9 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                   />
                 ) : (
                   <div className="p-4 rounded-lg bg-light-peach/30 min-h-[200px]">
-                    <p className="text-warm-brown/80 font-handwritten whitespace-pre-wrap">
+                    <div className="text-warm-brown/80 font-handwritten whitespace-pre-wrap min-h-[180px]">
                       {book.notes || 'No notes yet...'}
-                    </p>
+                    </div>
                   </div>
                 )}
               </div>
@@ -466,7 +602,7 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                 </label>
                 {isEditing ? (
                   <textarea
-                    value={editedBook.quotes}
+                    value={editedBook.quotes || ''}
                     onChange={(e) => setEditedBook({ ...editedBook, quotes: e.target.value })}
                     rows={6}
                     className="w-full px-4 py-3 rounded-lg border border-warm-brown/20 focus:border-blush-pink outline-none bg-cream font-handwritten resize-none"
@@ -474,9 +610,9 @@ const BookJournal = ({ book, onClose, onUpdate, onDelete }) => {
                   />
                 ) : (
                   <div className="p-4 rounded-lg bg-lavender-soft/30 min-h-[150px]">
-                    <p className="text-warm-brown/80 font-handwritten whitespace-pre-wrap">
+                    <div className="text-warm-brown/80 font-handwritten whitespace-pre-wrap min-h-[130px]">
                       {book.quotes || 'No quotes saved yet...'}
-                    </p>
+                    </div>
                   </div>
                 )}
               </div>

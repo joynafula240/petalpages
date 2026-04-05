@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, TrendingUp, Target, Calendar, Clock, Award, BarChart3, PieChart } from 'lucide-react';
+import ReadingHeatmap from './ReadingHeatmap';
 
 const ReadingDashboard = ({ books }) => {
   // Calculate statistics
@@ -152,6 +153,16 @@ const ReadingDashboard = ({ books }) => {
           </div>
         </motion.div>
       </div>
+      
+      {/* Reading Heatmap */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+        className="mt-6"
+      >
+        <ReadingHeatmap books={books} />
+      </motion.div>
     </div>
   );
 };
